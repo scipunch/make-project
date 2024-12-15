@@ -1,0 +1,53 @@
+#+title: Make project
+#+author: SciPunch
+#+options: toc:2
+
+* Table of contents :toc:
+- [[#description][Description]]
+- [[#demo][Demo]]
+- [[#installation][Installation]]
+
+* Description
+GNU make is a powerful tool as GNU Emacs compile mode.    
+This package helps to merge them into a powerful interface.
+
+Just run ~make-project-run~ interactive function and select make target.
+Each target will have an annotation with prerequisites (if exist) and a commment
+
+* Demo
+Given the following ~Makefile~:
+#+begin_src makefile :tangle Makefile
+# This comment will be ignored
+
+# Foo target
+foo:
+	echo "foo"
+
+bar: foo
+	echo "bar"
+
+# Comment for the baz target
+baz: foo bar
+	echo "baz"
+#+end_src
+
+Invoke ~make-project-run~:
+https://i.imgur.com/WHyP3Yq.png
+
+* Installation
+Using default ~package.el~ starting from GNU Emacs 29.1
+#+begin_src elisp
+(use-package
+ make-project
+ :vc (:url "https://github.com/scipunch/make-project"))
+#+end_src
+
+It requires Tree-Sitter grammar for make as well:
+#+begin_src elisp
+(add-to-list
+ treesit-language-source-alist
+ (make "https://github.com/alemuller/tree-sitter-make"))
+
+(treesit-install-language-grammar 'make)
+#+end_src
+

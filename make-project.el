@@ -1,6 +1,6 @@
 ;;; make-project.el --- Run Makefile commands with ease -*- lexical-binding: t;-*-
 
-;; Copyrightp (C) 2024 Andrey Semenov <scipunch@gmail.com>
+;; Copyright (C) 2024 SciPunch <scipunch@gmail.com>
 
 ;; Author: SciPunch <scipunch@gmail.com>
 ;; Maintainer: SciPunch <scipunch@gmail.com>
