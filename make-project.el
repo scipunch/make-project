@@ -122,6 +122,7 @@ Returns a table of available targets."
 (defun make-project--parse-makefile ()
   "Assumes that Makefile opened in the current buffer.
 Returns a `list' of `make-project--makefile-target'."
+  (treesit-parser-create 'make)
   (let* ((root (treesit-buffer-root-node))
          (target-nodes
           (treesit-query-capture root make-project--treesit-qeury))
