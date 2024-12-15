@@ -54,6 +54,9 @@
       :? @prerequisites)))
   "Tree-sitter query to construct `make-project--makefile-target' from.")
 
+(defvar make-project--target-column-width) ;
+(defvar make-project--prerequisites-column-width)
+
 ;;;###autoload
 (defun make-project-run ()
   "Select and run project's Makefile target."
@@ -67,9 +70,9 @@
        (max-prerequisites-width
         (make-project--max-width-by
          'make-project--makefile-target-prerequisites targets))
-       (target-column-width
+       (make-project--target-column-width
         (+ max-target-width make-project-column-margin))
-       (prerequisites-column-width
+       (make-project--prerequisites-column-width
         (+ max-prerequisites-width make-project-column-margin))
        (targets-alist
         (mapcar
@@ -89,11 +92,11 @@
                     (make-project--makefile-target-comment target))
                    (target-column-padding
                     (make-project--calculate-padding
-                     target-column-width
+                     make-project--target-column-width
                      target-name))
                    (prerequisites-column-padding
                     (make-project--calculate-padding
-                     prerequisites-column-width
+                     make-project--prerequisites-column-width
                      prerequisites)))
               (s-concat
                (make-string target-column-padding ?\s)
