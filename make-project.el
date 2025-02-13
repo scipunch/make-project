@@ -63,7 +63,8 @@
   (interactive)
   (let*
       ((default-directory (project-root (project-current)))
-       (targets (make-project--parse-project-makefile))
+       (makefile (make-project--select-makefile))
+       (targets (make-project--parse-project-makefile makefile))
        (max-target-width
         (make-project--max-width-by
          'make-project--makefile-target-name targets))
@@ -110,17 +111,31 @@
                              "")
                            'face 'completions-annotations))))))
        (target (completing-read "Make target: " targets-alist)))
-    (compile (format "make %s" target))))
+    (let ((default-directory
+           (file-name-directory (expand-file-name makefile))))
+      (compile (format "make %s" target)))))
 
-(defun make-project--parse-project-makefile ()
-  "Search for the Makefile in the `default-directory'.
-Returns a table of available targets."
-  (let ((makefile (expand-file-name "Makefile")))
-    (if (file-exists-p makefile)
-        (with-temp-buffer
-          (insert-file-contents makefile)
-          (make-project--parse-makefile))
-      (warn "No Makefile found in project root"))))
+(defun make-project--select-makefile ()
+  "Searches for the all Makefile's in the `default-directory'.
+Returns path if only one Makefile was found.
+Else interactively requests selection."
+  (message "DEFAULT DIRECTORY %s" default-directory)
+  (let ((files
+         (mapcar
+          (lambda (path) (string-replace default-directory "" path))
+          (directory-files-recursively
+           default-directory "^Makefile$"))))
+    (if (eq (length files) 1)
+        (car files)
+      (completing-read "Makefile: " files))))
+
+(defun make-project--parse-project-makefile (makefile)
+  "Returns a table of available targets in MAKEFILE."
+  (if (file-exists-p makefile)
+      (with-temp-buffer
+        (insert-file-contents makefile)
+        (make-project--parse-makefile))
+    (warn "No Makefile found in project root")))
 
 (defun make-project--parse-makefile ()
   "Assumes that Makefile opened in the current buffer.
