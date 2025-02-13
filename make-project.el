@@ -124,7 +124,8 @@ Else interactively requests selection."
          (mapcar
           (lambda (path) (string-replace default-directory "" path))
           (directory-files-recursively
-           default-directory "^Makefile$"))))
+           default-directory "^Makefile$"
+           nil (lambda (x) (not (string-match-p "/\\." x)))))))
     (if (eq (length files) 1)
         (car files)
       (completing-read "Makefile: " files))))
