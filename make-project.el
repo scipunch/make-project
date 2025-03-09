@@ -61,6 +61,7 @@
 (defun make-project-run ()
   "Select and run project's Makefile target."
   (interactive)
+  (treesit-parser-create 'make)
   (let*
       ((default-directory (project-root (project-current)))
        (makefile (make-project--select-makefile))
